@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_search_page"
+        android:icon="@drawable/search_box_state"
+        android:title="" />
+    <item
+        android:id="@+id/nav_favorite_page"
+        android:icon="@drawable/start_box_state"
+        android:title="" />
+</menu>

@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">SWLibrary</string>
+    <string name="people_starships_planets">People, Starships, Planets...</string>
+    <string name="population_count">1000</string>
+    <string name="population">population:</string>
+    <string name="diameter_size">10200</string>
+    <string name="diameter">diameter:</string>
+    <string name="planet_name">Yavin IV</string>
+    <string name="pilots_name">-</string>
+    <string name="pilots">pilots:</string>
+    <string name="manufacturer_name">Imperial Department of Military Research, Sienar Fleet Systems</string>
+    <string name="manufacturer">manufacturer:</string>
+    <string name="model_name">DS-1 Orbital Battle Station</string>
+    <string name="starship_name">Death Star</string>
+    <string name="starships_count">4</string>
+    <string name="starships_count_title">starships count:</string>
+    <string name="gender">male</string>
+    <string name="luke_skywalker">Luke Skywalker</string>
+</resources>
