@@ -11,7 +11,10 @@ import com.example.swlibrary.model.PlanetResults
 import com.example.swlibrary.model.StarshipResults
 
 
-class StarWarsItemAdapter(private val dataList: List<Any>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class StarWarsItemAdapter(private val dataList: List<Any>
+/*private val characterList: List<CharacterResults>,
+                          private val starshipList: List<StarshipResults>,
+                          private val planetList: List<PlanetResults>*/): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //val data = emptyList<List<Any>>()
 
@@ -36,37 +39,46 @@ class StarWarsItemAdapter(private val dataList: List<Any>): RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is VHCharacter) {
-            val dataItem = dataList[position] as CharacterResults
-            holder.characterName.text = dataItem.name
-            holder.characterGender.text = dataItem.gender
-            //holder.characterStarshipsCount.text = dataItem.starships.toString()
-            //cast holder to VHItem and set data
-        } else if (holder is VHStarship) {
-            val dataItem = dataList[position] as StarshipResults
-            holder.starshipTitle.text = dataItem.name
-            holder.model.text = dataItem.model
-            holder.manufacturer.text = dataItem.manufacturer
-            //holder.pilots.text = dataItem.pilots.toString()
-        } else if (holder is VHPlanet) {
-            val dataItem = dataList[position] as PlanetResults
-            holder.planetName.text = dataItem.name
-            holder.diameter.text = dataItem.diameter.toString()
-            holder.population.text = dataItem.population.toString()
+        when (holder) {
+            is VHCharacter -> {
+                val dataItem = dataList[position] as CharacterResults
+                if (dataItem != null) {
+                    holder.characterName.text = dataItem.name
+                    holder.characterGender.text = dataItem.gender
+                    holder.characterStarshipsCount.text = dataItem.starships.size.toString()
+                }
+            }
+            is VHStarship -> {
+                val dataItem = dataList[position] as StarshipResults
+                if (dataItem != null) {
+                    holder.starshipTitle.text = dataItem.name
+                    holder.model.text = dataItem.model
+                    holder.manufacturer.text = dataItem.manufacturer
+                    holder.pilots.text = dataItem.pilots.size.toString()
+                }
+            }
+            is VHPlanet -> {
+                val dataItem = dataList[position] as PlanetResults
+                if (dataItem != null) {
+                    holder.planetName.text = dataItem.name
+                    holder.diameter.text = dataItem.diameter
+                    holder.population.text = dataItem.population
+                }
+            }
         }
     }
 
     internal class VHCharacter(binding: CharacterItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val characterName = binding.tvCharacterName
         val characterGender = binding.tvCharacterGender
-        //val characterStarshipsCount = binding.tvCharacterIsStarshipCount
+        val characterStarshipsCount = binding.tvCharacterIsStarshipCount
     }
 
     internal class VHStarship(binding: StarshipItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val starshipTitle = binding.tvStarshipName
         val model = binding.tvStarshipModel
         val manufacturer = binding.tvStarshipManufacturer
-        //val pilots = binding.tvStarshipPilotsName
+        val pilots = binding.tvStarshipPilotsName
     }
 
     internal class VHPlanet(binding: PlanetItemBinding) : RecyclerView.ViewHolder(binding.root) {

@@ -11,5 +11,5 @@ data class StarshipResults(
     val name: String,
     val model: String,
     val manufacturer: String,
-    //val pilots: List<CharacterResults>
+    val pilots: List<String>
 )

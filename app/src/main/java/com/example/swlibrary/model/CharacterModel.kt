@@ -10,5 +10,5 @@ data class CharacterModel(
 data class CharacterResults(
     val name: String,
     val gender: String,
-    //val starships: List<String>
+    val starships: List<String>
 )

@@ -39,41 +39,32 @@ class MainActivity : AppCompatActivity() {
         }*/
         //recyclerView = v.rv_sta
 
-        val dataList2: List<Any> = listOf(
-            CharacterResults("Luke", "female"),
-            PlanetResults("Moon", "128000", "200000"),
-            StarshipResults("Mercedes", "Модель 1 - Элемент 2", "fffff"),
-        )
+        /*val characterList = MutableList<List<CharacterResults>>()
+        val starshipList = mutableListOf<List<StarshipResults>>()
+        val planetList = mutableListOf<List<PlanetResults>>()
 
-        viewModel.getCharacterList()
+            viewModel.getCharacterList()
         viewModel.getPlanetList()
         viewModel.getStarshipList()
 
         viewModel.characterList.observe(this) { list ->
             list.body()?.let {
-                starWarsAdapter = StarWarsItemAdapter(it.results)
-                binding.rv.adapter = starWarsAdapter
-                binding.rv.layoutManager = LinearLayoutManager(this)
+                val characterList: List<CharacterResults> = it.results
             }
         }
         viewModel.planetList.observe(this) { list ->
-            list.body()?.let {
-                starWarsAdapter = StarWarsItemAdapter(it.results)
-                binding.rv.adapter = starWarsAdapter
-                binding.rv.layoutManager = LinearLayoutManager(this)
-            }
+            list.body()?.let { planetList.add(it.results) }
         }
         viewModel.starshipList.observe(this) { list ->
-            list.body()?.let {
-                starWarsAdapter = StarWarsItemAdapter(it.results)
-                binding.rv.adapter = starWarsAdapter
-                binding.rv.layoutManager = LinearLayoutManager(this)
-            }
-        }
+            list.body()?.let {starshipList.add(it.results) }
+        }*/
 
-        /*starWarsAdapter = StarWarsItemAdapter(dataList)
-        binding.rv.adapter = starWarsAdapter
-        binding.rv.layoutManager = LinearLayoutManager(this)*/
+        viewModel.getAllLists()
+        viewModel.combinedList.observe(this){
+            starWarsAdapter = StarWarsItemAdapter(it)
+            binding.rv.adapter = starWarsAdapter
+            binding.rv.layoutManager = LinearLayoutManager(this)
+        }
 
     }
 

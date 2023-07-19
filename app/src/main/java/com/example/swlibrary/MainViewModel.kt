@@ -34,4 +34,21 @@ class MainViewModel: ViewModel() {
         }
     }
 
+    val combinedList: MutableLiveData<List<Any>> = MutableLiveData()
+
+    fun getAllLists() {
+        viewModelScope.launch {
+            val characterList = repo.getCharacter().body()?.results ?: emptyList()
+            val planetList = repo.getPlanet().body()?.results ?: emptyList()
+            val starshipList = repo.getStarship().body()?.results ?: emptyList()
+
+            val allItems = mutableListOf<Any>()
+            allItems.addAll(characterList)
+            allItems.addAll(planetList)
+            allItems.addAll(starshipList)
+
+            combinedList.value = allItems
+        }
+    }
+
 }
