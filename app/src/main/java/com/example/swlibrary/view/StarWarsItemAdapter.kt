@@ -1,4 +1,4 @@
-package com.example.swlibrary
+package com.example.swlibrary.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

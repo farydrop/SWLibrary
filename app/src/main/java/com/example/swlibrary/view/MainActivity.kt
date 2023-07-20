@@ -1,24 +1,26 @@
-package com.example.swlibrary
+package com.example.swlibrary.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.swlibrary.R
+import com.example.swlibrary.data.api.ApiService
 import com.example.swlibrary.databinding.ActivityMainBinding
 import com.example.swlibrary.model.CharacterResults
-import com.example.swlibrary.model.PlanetModel
 import com.example.swlibrary.model.PlanetResults
 import com.example.swlibrary.model.StarshipResults
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var starWarsAdapter: StarWarsItemAdapter? = null
-    private val viewModel: MainViewModel by lazy {                  // lazy опускает применение свойства quizViewModel ак val, а не var.
-        ViewModelProvider(this).get(MainViewModel::class.java)    // Потому что нужно захватить и сохранить QuizViewModel, лишь когда создается экземпляр activity, поэтому quizViewModel получает значение только один раз.
-    }
+    private val viewModel: MainViewModel by viewModel()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,27 +39,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Введите не менее 2 символов", Toast.LENGTH_SHORT).show()
             }
         }*/
-        //recyclerView = v.rv_sta
-
-        /*val characterList = MutableList<List<CharacterResults>>()
-        val starshipList = mutableListOf<List<StarshipResults>>()
-        val planetList = mutableListOf<List<PlanetResults>>()
-
-            viewModel.getCharacterList()
-        viewModel.getPlanetList()
-        viewModel.getStarshipList()
-
-        viewModel.characterList.observe(this) { list ->
-            list.body()?.let {
-                val characterList: List<CharacterResults> = it.results
-            }
-        }
-        viewModel.planetList.observe(this) { list ->
-            list.body()?.let { planetList.add(it.results) }
-        }
-        viewModel.starshipList.observe(this) { list ->
-            list.body()?.let {starshipList.add(it.results) }
-        }*/
 
         viewModel.getAllLists()
         viewModel.combinedList.observe(this){
@@ -65,6 +46,7 @@ class MainActivity : AppCompatActivity() {
             binding.rv.adapter = starWarsAdapter
             binding.rv.layoutManager = LinearLayoutManager(this)
         }
+
 
     }
 
