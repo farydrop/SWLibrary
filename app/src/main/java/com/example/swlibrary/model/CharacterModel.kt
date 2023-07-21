@@ -1,5 +1,12 @@
 package com.example.swlibrary.model
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.swlibrary.data.local.CharacterTypeConverter
+import com.google.gson.annotations.SerializedName
+
 data class CharacterModel(
     val count: Int,
     val next: String,
@@ -7,8 +14,18 @@ data class CharacterModel(
     val results: List<CharacterResults>
 )
 
+@Entity(tableName = "character_table")
 data class CharacterResults(
-    val name: String,
-    val gender: String,
-    val starships: List<String>
-)
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "gender") val gender: String,
+    @ColumnInfo(name = "starships") @SerializedName("starships") val starships: List<String> = listOf()
+) {
+    constructor(name: String, gender: String, starships: List<String>) : this(
+        0,
+        name,
+        gender,
+        starships
+    )
+}

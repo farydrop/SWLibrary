@@ -3,6 +3,7 @@ package com.example.swlibrary.view
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.swlibrary.data.local.StarWarsRepository
 import com.example.swlibrary.data.repository.GetStarWarsApiRepository
 import com.example.swlibrary.model.CharacterResults
 import com.example.swlibrary.model.PlanetResults
@@ -10,17 +11,53 @@ import com.example.swlibrary.model.StarshipResults
 import kotlinx.coroutines.launch
 import retrofit2.awaitResponse
 
-class MainViewModel() : ViewModel() {
+class MainViewModel(private val repository: StarWarsRepository) : ViewModel() {
 
     var repo = GetStarWarsApiRepository()
     val combinedList: MutableLiveData<List<Any>> = MutableLiveData()
 
     fun getAllLists() {
         viewModelScope.launch {
+            /*val allItems = mutableListOf<Any>()
+            characterList()?.let {
+                repository.insertCharacter(it)
+                allItems.addAll(it)
+            }
+            planetList()?.let {
+                repository.insertPlanets(it)
+                allItems.addAll(it)
+            }
+            starshipList()?.let {
+                repository.insertStarships(it)
+                allItems.addAll(it)
+            }*/
+
             val allItems = mutableListOf<Any>()
-            characterList()?.let { allItems.addAll(it) }
-            planetList()?.let { allItems.addAll(it) }
-            starshipList()?.let { allItems.addAll(it) }
+
+            val characterList = repository.getCharacters()
+            val planetList = repository.getPlanets()
+            val starshipList = repository.getStarships()
+
+            allItems.addAll(characterList)
+            allItems.addAll(planetList)
+            allItems.addAll(starshipList)
+
+            // If data is available in Room, update the LiveData immediately
+            if (characterList.isEmpty() && planetList.isEmpty() && starshipList.isEmpty()) {
+                characterList()?.let {
+                    val i = repository.insertCharacter(it)
+                    allItems.addAll(listOf(i))
+                }
+                planetList()?.let {
+                    val i = repository.insertPlanets(it)
+                    allItems.addAll(listOf(i))
+                }
+                starshipList()?.let {
+                    val i = repository.insertStarships(it)
+                    allItems.addAll(listOf(i))
+                }
+                (combinedList as MutableLiveData).value = allItems
+            }
             combinedList.value = allItems
         }
 
