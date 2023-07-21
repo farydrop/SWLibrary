@@ -3,10 +3,7 @@ package com.example.swlibrary.di
 import android.app.Application
 import androidx.room.Room
 import com.example.swlibrary.data.local.AppDatabase
-import com.example.swlibrary.data.local.CharacterDao
-import com.example.swlibrary.data.local.PlanetDao
 import com.example.swlibrary.data.local.StarWarsDao
-import com.example.swlibrary.data.local.StarshipDao
 import org.koin.dsl.module
 
 val daoModule = module {

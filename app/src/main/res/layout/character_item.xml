@@ -1,70 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="15dp"
-    app:strokeWidth="0dp"
     android:layout_marginTop="16dp"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp">
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/item_background">
-
-        <TextView
-            android:id="@+id/tvCharacterName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/luke_skywalker"
-            android:textSize="27sp"
-            android:textColor="@color/primary"
-            android:paddingTop="8dp"
-            android:paddingBottom="4dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"/>
-
-        <TextView
-            android:id="@+id/tvCharacterGender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gender"
-            android:textSize="20sp"
-            android:textColor="@color/primary"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="4dp"/>
+        app:cardCornerRadius="15dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp">
+            android:background="@color/item_background">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/starships_count_title"
-                android:textSize="20sp"
-                android:textColor="@color/primary"/>
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvCharacterIsStarshipCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/starships_count"
-                android:textSize="20sp"
-                android:textColor="@color/primary"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"/>
+                <TextView
+                    android:id="@+id/tvCharacterName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/luke_skywalker"
+                    android:textSize="27sp"
+                    android:textColor="@color/primary"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="4dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"/>
+
+                <TextView
+                    android:id="@+id/tvCharacterGender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gender"
+                    android:textSize="20sp"
+                    android:textColor="@color/primary"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="4dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/starships_count_title"
+                        android:textSize="20sp"
+                        android:textColor="@color/primary"/>
+
+                    <TextView
+                        android:id="@+id/tvCharacterIsStarshipCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/starships_count"
+                        android:textSize="20sp"
+                        android:textColor="@color/primary"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-</com.google.android.material.card.MaterialCardView>
+    <ImageView
+        android:id="@+id/ivFavoriteButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_star_border"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        app:layout_goneMarginTop="8dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

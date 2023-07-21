@@ -3,8 +3,6 @@ package com.example.swlibrary.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.example.swlibrary.data.local.CharacterTypeConverter
 import com.google.gson.annotations.SerializedName
 
 data class CharacterModel(
@@ -20,12 +18,14 @@ data class CharacterResults(
     val id: Int,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "gender") val gender: String,
-    @ColumnInfo(name = "starships") @SerializedName("starships") val starships: List<String> = listOf()
+    @ColumnInfo(name = "starships") @SerializedName("starships") val starships: List<String> = listOf(),
+    @ColumnInfo(name = "favorite") var favorite: Boolean
 ) {
-    constructor(name: String, gender: String, starships: List<String>) : this(
+    constructor(name: String, gender: String, starships: List<String>, favorite: Boolean) : this(
         0,
         name,
         gender,
-        starships
+        starships,
+        favorite
     )
 }

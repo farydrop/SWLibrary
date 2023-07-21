@@ -1,26 +1,30 @@
 package com.example.swlibrary.view
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.swlibrary.R
-import com.example.swlibrary.data.api.ApiService
 import com.example.swlibrary.databinding.ActivityMainBinding
-import com.example.swlibrary.model.CharacterResults
-import com.example.swlibrary.model.PlanetResults
-import com.example.swlibrary.model.StarshipResults
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Type
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var starWarsAdapter: StarWarsItemAdapter? = null
     private val viewModel: MainViewModel by viewModel()
+    private lateinit var fullItemList: List<Any>
+    var progressDialog: Dialog? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,22 +33,74 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupBottomNavigation()
 
-        val dataList= mutableListOf<Any>()
-
-        /*binding.ivSearchButton.setOnClickListener {
-            val query = binding.etSearch.text.toString().trim()
-            if (query.length >= 2) {
-                searchCharactersAndStarships(query)
-            } else {
-                Toast.makeText(this, "Введите не менее 2 символов", Toast.LENGTH_SHORT).show()
+        viewModel.showProgress.observe(this) { isVisible ->
+            progressDialog?.dismiss()
+            if (isVisible) {
+                progressDialog = Dialog(this@MainActivity, android.R.style.Theme_Translucent_NoTitleBar)
+                    .apply {
+                        setContentView(
+                            layoutInflater.inflate(
+                                R.layout.progress_bar,
+                                null
+                            )
+                        )
+                        setCancelable(false)
+                        show()
+                    }
             }
-        }*/
+        }
 
         viewModel.getAllLists()
         viewModel.combinedList.observe(this){
-            starWarsAdapter = StarWarsItemAdapter(it)
+            fullItemList = it
+            starWarsAdapter = StarWarsItemAdapter(fullItemList)
             binding.rv.adapter = starWarsAdapter
             binding.rv.layoutManager = LinearLayoutManager(this)
+        }
+
+        /*binding.etSearch.setOnKeyListener { _, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                val inputText = binding.etSearch.text.toString()
+                val sortedList = fullItemList.filter { it.toString().contains(inputText, ignoreCase = true) }
+                starWarsAdapter = StarWarsItemAdapter(sortedList)
+                binding.rv.adapter = starWarsAdapter
+                binding.rv.layoutManager = LinearLayoutManager(this)
+
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
+
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
+        }*/
+
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if ((s?.length ?: 0) >= 2) {
+                    val inputText = s.toString()
+                    val sortedList = fullItemList.filter { it.toString().contains(inputText, ignoreCase = true) }
+                    starWarsAdapter = StarWarsItemAdapter(sortedList)
+                    binding.rv.adapter = starWarsAdapter
+                    binding.rv.layoutManager = LinearLayoutManager(this@MainActivity)
+                    binding.rv.recycledViewPool.setMaxRecycledViews(1, 100);
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+
+        binding.etSearch.setOnEditorActionListener {  _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // Hide the keyboard
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
         }
 
 
@@ -60,7 +116,8 @@ class MainActivity : AppCompatActivity() {
                             return@OnNavigationItemSelectedListener true
                         }
                         R.id.nav_favorite_page -> {
-                            return@OnNavigationItemSelectedListener true
+                            val intent = Intent(this@MainActivity, FavoritesActivity::class.java)
+                            startActivity(intent)
                         }
                     }
                     false

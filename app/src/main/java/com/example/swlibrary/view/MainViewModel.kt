@@ -8,31 +8,21 @@ import com.example.swlibrary.data.repository.GetStarWarsApiRepository
 import com.example.swlibrary.model.CharacterResults
 import com.example.swlibrary.model.PlanetResults
 import com.example.swlibrary.model.StarshipResults
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.awaitResponse
 
 class MainViewModel(private val repository: StarWarsRepository) : ViewModel() {
 
-    var repo = GetStarWarsApiRepository()
+    private var repo = GetStarWarsApiRepository()
     val combinedList: MutableLiveData<List<Any>> = MutableLiveData()
+    val showProgress: MutableLiveData<Boolean> = MutableLiveData()
+    private val allItems = mutableListOf<Any>()
 
     fun getAllLists() {
         viewModelScope.launch {
-            /*val allItems = mutableListOf<Any>()
-            characterList()?.let {
-                repository.insertCharacter(it)
-                allItems.addAll(it)
-            }
-            planetList()?.let {
-                repository.insertPlanets(it)
-                allItems.addAll(it)
-            }
-            starshipList()?.let {
-                repository.insertStarships(it)
-                allItems.addAll(it)
-            }*/
-
-            val allItems = mutableListOf<Any>()
+            showProgress.value = true
 
             val characterList = repository.getCharacters()
             val planetList = repository.getPlanets()
@@ -42,26 +32,32 @@ class MainViewModel(private val repository: StarWarsRepository) : ViewModel() {
             allItems.addAll(planetList)
             allItems.addAll(starshipList)
 
-            // If data is available in Room, update the LiveData immediately
             if (characterList.isEmpty() && planetList.isEmpty() && starshipList.isEmpty()) {
-                characterList()?.let {
-                    val i = repository.insertCharacter(it)
-                    allItems.addAll(listOf(i))
-                }
-                planetList()?.let {
-                    val i = repository.insertPlanets(it)
-                    allItems.addAll(listOf(i))
-                }
-                starshipList()?.let {
-                    val i = repository.insertStarships(it)
-                    allItems.addAll(listOf(i))
-                }
-                (combinedList as MutableLiveData).value = allItems
+                insertAll()
             }
+
             combinedList.value = allItems
+            showProgress.postValue(false)
         }
 
     }
+
+    private suspend fun insertAll() {
+        characterList()?.let {
+            repository.insertCharacter(it)
+            allItems.addAll(it)
+        }
+        planetList()?.let {
+            repository.insertPlanets(it)
+            allItems.addAll(it)
+        }
+        starshipList()?.let {
+            repository.insertStarships(it)
+            allItems.addAll(it)
+        }
+        combinedList.value = allItems
+    }
+
     private suspend fun planetList(url: String = "https://swapi.dev/api/planets/"): List<PlanetResults>? {
         val planetResponse = repo.getPlanet(url).awaitResponse()
         if (planetResponse.isSuccessful) {
